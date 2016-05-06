@@ -1,8 +1,9 @@
 {
   "name": "leaflet-sgsilayercontrol",
   "version": "1.0.0",
-  "homepage": "https://github.com/phoeniceus/leaflet-sgsilayercontrol",
+  "homepage": "https://github.com/SGSIMapping/leaflet-sgsilayercontrol",
   "authors": [
+    "Christy Heaton",
     "Matthew Katinsky",
     "Ishmael Smyrnow"
   ],
