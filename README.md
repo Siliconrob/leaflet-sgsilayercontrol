@@ -23,7 +23,7 @@ Include the compressed JavaScript and CSS files located in the `/dist` folder.
 This project will soon be available via bower:
 
 ```
-bower install leaflet-sgsilayercontrol
+bower install leaflet-grouplayercontrol
 ```
 
 ## Usage
