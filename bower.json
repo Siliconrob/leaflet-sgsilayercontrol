@@ -1,6 +1,6 @@
 {
-  "name": "leaflet-sgsilayercontrol",
-  "version": "1.0.0",
+  "name": "leaflet-grouplayercontrol",
+  "version": "1.0.1",
   "homepage": "https://github.com/SGSIMapping/leaflet-sgsilayercontrol",
   "authors": [
     "Christy Heaton",
@@ -8,7 +8,7 @@
     "Ishmael Smyrnow"
   ],
   "description": "A Leaflet layer control with support for drop-down grouped layers and label toggling.",
-  "main": "dist/leaflet.sgsilayercontrol.min.js",
+  "main": "dist/leaflet.grouplayercontrol.min.js",
   "keywords": [
     "leaflet",
     "overlay",
