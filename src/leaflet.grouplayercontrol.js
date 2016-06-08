@@ -406,7 +406,7 @@ L.Control.GroupedLayers = L.Control.extend({
         selectedGroup.setLabeled(!selectedGroup.getLabeled());
         if (this.options.labelCallback)
         {
-          this.options.labelCallback(this._getLabeledLayers());
+          this.options.labelCallback(this._getLabeledLayers(), selectedGroup);
         }
         break;
 
@@ -420,7 +420,7 @@ L.Control.GroupedLayers = L.Control.extend({
 
         if (this.options.labelCallback && selectedGroup.getLabeled())
         {
-          this.options.labelCallback(this._getLabeledLayers());
+          this.options.labelCallback(this._getLabeledLayers(), selectedGroup);
         }
         break;
     }
