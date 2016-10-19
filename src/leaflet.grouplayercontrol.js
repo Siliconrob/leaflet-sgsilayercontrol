@@ -424,10 +424,14 @@ L.Control.GroupedLayers = L.Control.extend({
         }
         break;
     }
-
+	this._map.fire("layercontrolchange", {
+		group: selectedGroup,
+		layer: selectedLayer,
+		action: evt.currentTarget.LayerControlAction
+	});
     this._handlingClick = false;
   },
-
+  
   _setLayerDisplay: function (layer, visible)
   {
     var currentDisplay = this._map.hasLayer(layer);
