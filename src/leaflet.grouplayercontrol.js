@@ -7,6 +7,16 @@ var LayerControlAction = {
   SelectLayer: 3
 };
 
+function GroupLayerDetail(name, display, label, selected) {	
+	var result = {
+		Name: name || "",
+		Display: display,
+		Labeled: label,
+		SelectedLayer: selected || ""
+	};
+	return result;
+};
+
 // Since each table row in the layer control is a single LayerControlGroup rather than a layer,
 // all the HTML elements are associated with a group rather than an item.
 // options:
@@ -77,6 +87,10 @@ function LayerControlGroup(layers, name, options)
   // Get the label icon state
   this.getLabeled = function ()
   {
+	const isLabeled = this.labelElement || false;
+	if (!isLabeled) {
+		return false;
+	}	
     return !this.labelElement || this.labelElement.classList.contains("leaflet-control-label-checked");
   };
 
@@ -461,6 +475,23 @@ L.Control.GroupedLayers = L.Control.extend({
   {
     this._container.className = this._container.className.replace(' leaflet-control-layers-expanded', '');
   },
+  
+  _groupSetting: function(layerGroup)
+  {
+	layerGroup = layerGroup || {};
+	var result = new GroupLayerDetail(layerGroup.name,
+		layerGroup.getDisplay(),
+		layerGroup.getLabeled(),
+		layerGroup.getSelectedLayer());
+	return result;
+  },
+  
+  current: function()
+  {
+	const that = this;
+	const state = (that._groups || []).map(function(z) { return that._groupSetting(z); }) || [];
+	return state;
+  }  
 });
 
 L.control.groupedLayers = function (layers, options)
