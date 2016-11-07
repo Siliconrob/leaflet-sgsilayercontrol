@@ -7,6 +7,16 @@ var LayerControlAction = {
   SelectLayer: 3
 };
 
+function GroupLayerDetail(name, display, label, selected) {	
+	var result = {
+		Name: name || "",
+		Display: display,
+		Labeled: label,
+		SelectedLayer: selected || ""
+	};
+	return result;
+};
+
 // Since each table row in the layer control is a single LayerControlGroup rather than a layer,
 // all the HTML elements are associated with a group rather than an item.
 // options:
@@ -19,7 +29,7 @@ function LayerControlGroup(layers, name, options)
   options.display = options.display || "show";
   options.label = options.label || "unchecked";
   options.selectedItemName = options.selectedItemName || "";
-
+  options.shouldDisplayName = options.shouldDisplayName === false ? false : true;
   // Convert single layer to array if necessary
   if (!(layers && layers.constructor === Array)) { layers = [layers]; }
 
@@ -77,6 +87,10 @@ function LayerControlGroup(layers, name, options)
   // Get the label icon state
   this.getLabeled = function ()
   {
+	const isLabeled = this.labelElement || false;
+	if (!isLabeled) {
+		return false;
+	}	
     return !this.labelElement || this.labelElement.classList.contains("leaflet-control-label-checked");
   };
 
@@ -124,7 +138,7 @@ function LayerControlGroup(layers, name, options)
 
   // Create the name element
   this.nameElement = document.createElement('span');
-  this.nameElement.innerHTML = ' ' + this.name;
+  this.nameElement.innerHTML = ' ' + (options.shouldDisplayName === true ? this.name : '');
   this.nameElement.groupName = this.name;
 
   // Create the select element
@@ -134,7 +148,7 @@ function LayerControlGroup(layers, name, options)
     // NOTE: Opening the select element and displaying the options list fires the select.onmouseout event which 
     // propagates to the div container and collapses the layer control. The onmouseout handler below will
     // stop this event from propagating. It has an if-else clause because IE handles this differently than other browsers.
-    var selectHtml = '<select class="leaflet-control-layers-selector" onmouseout="if (arguments[0]) {arguments[0].stopPropagation();} else {window.event.cancelBubble();}">';
+    var selectHtml = '<select class="leaflet-control-layers-selector-' + name + '" onmouseout="if (arguments[0]) {arguments[0].stopPropagation();} else {window.event.cancelBubble();}">';
     for (var i = 0; i < this.layers.length; i++)
     {
       var currentLayer = this.layers[i];
@@ -366,10 +380,9 @@ L.Control.GroupedLayers = L.Control.extend({
       td.innerHTML = "&nbsp;";
     }
     tr.appendChild(td);
-
-    td = document.createElement('td');
-    td.appendChild(group.nameElement);
-    if (group.selectElement)
+	td = document.createElement('td');
+	td.appendChild(group.nameElement);
+	if (group.selectElement)
     {
       L.DomEvent.on(group.selectElement, 'change', this._onLayerControlAction, this);
       td.appendChild(group.selectElement);
@@ -407,7 +420,7 @@ L.Control.GroupedLayers = L.Control.extend({
         selectedGroup.setLabeled(!selectedGroup.getLabeled());
         if (this.options.labelCallback)
         {
-          this.options.labelCallback(this._getLabeledLayers());
+          this.options.labelCallback(this._getLabeledLayers(), selectedGroup);
         }
         break;
 
@@ -421,14 +434,18 @@ L.Control.GroupedLayers = L.Control.extend({
 
         if (this.options.labelCallback && selectedGroup.getLabeled())
         {
-          this.options.labelCallback(this._getLabeledLayers());
+          this.options.labelCallback(this._getLabeledLayers(), selectedGroup);
         }
         break;
     }
-
+	this._map.fire("layercontrolchange", {
+		group: selectedGroup,
+		layer: selectedLayer,
+		action: evt.currentTarget.LayerControlAction
+	});
     this._handlingClick = false;
   },
-
+  
   _setLayerDisplay: function (layer, visible)
   {
     var currentDisplay = this._map.hasLayer(layer);
@@ -458,6 +475,23 @@ L.Control.GroupedLayers = L.Control.extend({
   {
     this._container.className = this._container.className.replace(' leaflet-control-layers-expanded', '');
   },
+  
+  _groupSetting: function(layerGroup)
+  {
+	layerGroup = layerGroup || {};
+	var result = new GroupLayerDetail(layerGroup.name,
+		layerGroup.getDisplay(),
+		layerGroup.getLabeled(),
+		layerGroup.getSelectedLayer());
+	return result;
+  },
+  
+  current: function()
+  {
+	const that = this;
+	const state = (that._groups || []).map(function(z) { return that._groupSetting(z); }) || [];
+	return state;
+  }  
 });
 
 L.control.groupedLayers = function (layers, options)

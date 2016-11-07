@@ -1,4 +1,4 @@
-Leaflet.sgsilayercontrol
+Leaflet.grouplayercontrol
 ===========================
 
 This is a replacement for the standard Leaflet layer control.
@@ -23,7 +23,7 @@ Include the compressed JavaScript and CSS files located in the `/dist` folder.
 This project will soon be available via bower:
 
 ```
-bower install leaflet-sgsilayercontrol
+bower install leaflet-grouplayercontrol
 ```
 
 ## Usage
@@ -77,5 +77,5 @@ two arguments, an array of LayerControlGroup objects and a set of options:
   map.addControl(layerControl);
 ```
 
-Leaflet.sgsilayercontrol is free software, and may be redistributed under
+Leaflet.grouplayercontrol is free software, and may be redistributed under
 the MIT-LICENSE.

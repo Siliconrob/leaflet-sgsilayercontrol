@@ -13,8 +13,21 @@
 }
 
 select.leaflet-control-layers-selector {
-  margin-left: 10px;
-  margin-right: 10px;
+  position: relative;
+  display: inline-block;
+  float: right;
+}
+
+select.leaflet-control-layers-selector-Blue {
+  display: inline-block;
+  float: left;
+  color: blue;
+}
+
+select.leaflet-control-layers-selector-Red {
+  display: inline-block;
+  float: left;
+  color: red;
 }
 
 .leaflet-control-layers-overlays th {
